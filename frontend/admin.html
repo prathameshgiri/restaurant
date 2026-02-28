@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Gourmet Paradise</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css">
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">Admin Panel</div>
+        <div class="auth-buttons">
+            <span id="admin-name" style="margin-right: 1rem; font-weight: 600;"></span>
+            <button class="btn btn-outline" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <div class="admin-sidebar">
+            <ul>
+                <li><a href="#" class="active" onclick="showSection('orders')">Orders</a></li>
+                <li><a href="#" onclick="showSection('bookings')">Bookings</a></li>
+                <li><a href="#" onclick="showSection('messages')">Messages</a></li>
+            </ul>
+        </div>
+
+        <div class="admin-content">
+            <!-- Orders Section -->
+            <div id="orders-section" class="dash-section">
+                <div class="dashboard-card">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h2>Recent Orders</h2>
+                        <button class="btn btn-primary" onclick="loadOrders()">Refresh</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table">
+                            <!-- Injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Bookings Section -->
+            <div id="bookings-section" class="dash-section" style="display: none;">
+                <div class="dashboard-card">
+                    <h2>Table Bookings</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Name</th>
+                                <th>People</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookings-table">
+                            <!-- Injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Messages Section -->
+            <div id="messages-section" class="dash-section" style="display: none;">
+                <div class="dashboard-card">
+                    <h2>Customer Messages</h2>
+                    <div id="messages-list" style="display: grid; gap: 1rem;">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        // Check if admin
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user || user.role !== 'admin') {
+            window.location.href = 'login.html';
+        } else {
+            document.getElementById('admin-name').innerText = `Welcome, ${user.name}`;
+        }
+
+        function showSection(section) {
+            document.querySelectorAll('.dash-section').forEach(s => s.style.display = 'none');
+            document.getElementById(`${section}-section`).style.display = 'block';
+
+            document.querySelectorAll('.admin-sidebar a').forEach(a => a.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+
+</html>

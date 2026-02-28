@@ -1,0 +1,609 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gourmet Paradise | Exquisite Dining & Restaurant Booking</title>
+    <meta name="description"
+        content="Experience luxury dining at Gourmet Paradise. Book a table, order food online, and enjoy an unforgettable culinary journey.">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Font Awesome: served locally from node_modules (no internet needed) -->
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav id="main-nav">
+        <div class="logo">Gourmet <span>Paradise</span></div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#menu">Menu</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#testimonials">Reviews</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <div id="nav-auth">
+                <a href="login.html" class="btn btn-outline" style="padding:0.65rem 1.4rem; font-size:0.9rem;">Login</a>
+            </div>
+            <button class="cart-btn" onclick="toggleCart()" id="cart-toggle-btn">
+                <span id="cart-count">0</span> items
+            </button>
+        </div>
+    </nav>
+
+    <!-- ===== CART OVERLAY ===== -->
+    <div class="cart-overlay" id="cart-overlay">
+        <div class="cart-header">
+            <h2>Your Order</h2>
+            <button class="cart-close-btn" onclick="toggleCart()"></button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <div style="text-align: center; color: var(--text-muted); padding: 3rem 0;">
+                Your cart is empty
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total-row">
+                <h3>Total</h3>
+                <span class="total-amount" id="total-price">â‚¹0</span>
+            </div>
+            <button class="btn btn-primary" style="width:100%; justify-content:center; margin-bottom:0.6rem;"
+                onclick="placeOrder()">
+                Place Order
+            </button>
+            <button class="btn btn-outline" style="width:100%; justify-content:center;" onclick="toggleCart()">
+                Continue Browsing
+            </button>
+        </div>
+    </div>
+    <div id="cart-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:2000;"
+        onclick="toggleCart()"></div>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero" id="home">
+        <!-- LEFT: Heading & Intro -->
+        <div class="hero-left">
+            <div class="hero-badge lazy-fade-left">
+                India's #1 Rated Restaurant 2026
+            </div>
+            <h1 class="lazy-fade-left" style="transition-delay:0.1s">
+                Taste the
+                <span>Art of Fine Dining</span>
+            </h1>
+            <p class="lazy-fade-left" style="transition-delay:0.2s">
+                Experience culinary excellence where every dish tells a story. Crafted with passion,
+                served with elegance â€” a dining experience you'll never forget.
+            </p>
+            <div class="hero-cta lazy-fade-left" style="transition-delay:0.3s">
+                <a href="#menu" class="btn btn-primary">
+                    Explore Menu
+                </a>
+                <a href="#about" class="btn btn-outline">
+                    Our Story
+                </a>
+            </div>
+            <div class="hero-stats lazy-fade-left" style="transition-delay:0.4s">
+                <div class="stat-item">
+                    <div class="num">15+</div>
+                    <div class="label">Years of Excellence</div>
+                </div>
+                <div class="stat-item">
+                    <div class="num">120+</div>
+                    <div class="label">Menu Items</div>
+                </div>
+                <div class="stat-item">
+                    <div class="num">50k+</div>
+                    <div class="label">Happy Guests</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Book Table Form -->
+        <div class="hero-right lazy-fade-right" style="transition-delay:0.2s">
+            <div class="hero-booking-card">
+                <h3>Reserve Your Table</h3>
+                <p>Book instantly â€” no waiting, no hassle.</p>
+                <form id="hero-booking-form">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="hb-name" placeholder="Your full name" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" id="hb-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Time</label>
+                            <input type="time" id="hb-time" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Number of Guests</label>
+                        <select id="hb-people" required>
+                            <option value="">Select guests</option>
+                            <option value="1">1 Person</option>
+                            <option value="2">2 People</option>
+                            <option value="3">3 People</option>
+                            <option value="4">4 People</option>
+                            <option value="5">5 People</option>
+                            <option value="6">6 People</option>
+                            <option value="8">8 People</option>
+                            <option value="10">10 People</option>
+                            <option value="15">15+ People</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary"
+                        style="width:100%; justify-content:center; margin-top:0.5rem;">
+                        Confirm Reservation
+                    </button>
+                </form>
+                <div
+                    style="display:flex; align-items:center; gap:8px; margin-top:1.2rem; color:var(--text-muted); font-size:0.82rem;">
+                    Free cancellation up to 24 hours before your booking
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ABOUT SECTION ===== -->
+    <section id="about" class="section-bg">
+        <div class="about-grid">
+            <div class="about-img-wrap lazy-fade-left">
+                <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=700&q=80"
+                    alt="Restaurant ambiance">
+                <div class="about-badge">
+                    <span class="num">15+</span>
+                    <span>Years of<br>Excellence</span>
+                </div>
+            </div>
+            <div class="about-text lazy-fade-right">
+                <div class="section-title" style="text-align:left; margin-bottom:1.5rem;">
+                    <span class="tag">Our Story</span>
+                    <h2>A Legacy of <span>Culinary</span> Passion</h2>
+                </div>
+                <p>Founded in 2010, Gourmet Paradise was born from a simple belief: that food is more than sustenance
+                    â€”
+                    it is an art form, a memory, a celebration. Our team of world-class chefs blends traditional recipes
+                    with modern innovation.</p>
+                <p>Every plate that leaves our kitchen carries the soul of our chefs and the warmth of our hospitality.
+                    We source only the finest, freshest ingredients from local farms and global partners.</p>
+                <div class="about-features">
+                    <div class="feature-item">
+                        <div class="feature-icon"></div>
+                        <div class="feature-text">
+                            <strong>Farm-to-Table Freshness</strong>
+                            <p>Ingredients sourced daily from certified local farms</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"></div>
+                        <div class="feature-text">
+                            <strong>Award-Winning Cuisine</strong>
+                            <p>Multiple national culinary awards 2018â€“2025</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"></div>
+                        <div class="feature-text">
+                            <strong>Cooked with Love</strong>
+                            <p>Personal care infused in every recipe we make</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== MENU SECTION ===== -->
+    <section id="menu">
+        <div class="section-title lazy-fade">
+            <span class="tag">Our Menu</span>
+            <h2>Crafted for Every Craving</h2>
+            <p>From delicate starters to rich mains and indulgent desserts</p>
+            <div class="title-bar"></div>
+        </div>
+
+        <div class="menu-tabs">
+            <button class="tab-btn active" onclick="filterMenu('all', this)">All Items</button>
+            <button class="tab-btn" onclick="filterMenu('starters', this)">Starters</button>
+            <button class="tab-btn" onclick="filterMenu('mains', this)">Main Course</button>
+            <button class="tab-btn" onclick="filterMenu('pasta', this)">Pasta & Noodles</button>
+            <button class="tab-btn" onclick="filterMenu('desserts', this)">Desserts</button>
+        </div>
+
+        <div class="menu-grid" id="menu-container">
+            <!-- Loaded by JS -->
+        </div>
+    </section>
+
+    <!-- ===== GALLERY SECTION ===== -->
+    <section id="gallery" class="section-bg">
+        <div class="section-title lazy-fade">
+            <span class="tag">Gallery</span>
+            <h2>A Feast for the Eyes</h2>
+            <p>Moments captured inside our world-class dining space</p>
+            <div class="title-bar"></div>
+        </div>
+        <div class="gallery-grid lazy-fade">
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=700&q=80" alt="Ambiance">
+                <div class="gallery-overlay">Fine Dining Ambiance</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500&q=80" alt="Food">
+                <div class="gallery-overlay">Signature Plating</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500&q=80" alt="Bar">
+                <div class="gallery-overlay">The Lounge</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?w=700&q=80" alt="Dish">
+                <div class="gallery-overlay">Chef's Special Dish</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=500&q=80" alt="Dessert">
+                <div class="gallery-overlay">Artisan Desserts</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TESTIMONIALS SECTION ===== -->
+    <section id="testimonials" class="testimonials-section">
+        <div class="t-orb t-orb-1"></div>
+        <div class="t-orb t-orb-2"></div>
+        <div class="section-title lazy-fade">
+            <span class="tag t-tag">&#9733; Guest Reviews</span>
+            <h2>Words from Our Table</h2>
+            <p>Over 50,000 guests have dined with us &mdash; here's what they remember</p>
+            <div class="title-bar" style="background:var(--accent);"></div>
+        </div>
+        <div class="t-rating-bar lazy-fade">
+            <div class="t-rating-score">4.9</div>
+            <div class="t-rating-detail">
+                <div class="t-stars-row">
+                    <span>Based on 12,400+ reviews</span>
+                </div>
+                <div class="t-platforms">
+                    <span class="t-platform-pill">Google 4.9</span>
+                    <span class="t-platform-pill">Zomato 4.8</span>
+                    <span class="t-platform-pill">TripAdvisor 5.0</span>
+                </div>
+            </div>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card lazy-fade" style="transition-delay:0s">
+                <div class="tc-top">
+                    <div class="testimonial-stars">
+                    </div>
+                    <span class="tc-verified">Verified</span>
+                </div>
+                <div class="testimonial-quote-mark">&ldquo;</div>
+                <p class="tc-text">An absolutely extraordinary dining experience. The Truffle Pasta was the best I've
+                    had outside of Rome. Every detail â€” from the candlelit ambiance to the flawless service â€” was
+                    perfect.</p>
+                <div class="tc-dish-tag">Ordered: Truffle Fettuccine</div>
+                <div class="testimonial-author">
+                    <div class="tc-avatar-ring">
+                        <img class="testimonial-avatar" src="https://i.pravatar.cc/150?img=1" alt="Priya S.">
+                    </div>
+                    <div class="author-info">
+                        <strong>Priya Sharma</strong>
+                        <span>Food Blogger &middot; Mumbai</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card tc-featured lazy-fade" style="transition-delay:0.12s">
+                <div class="tc-featured-badge">&#11088; Top Review</div>
+                <div class="tc-top">
+                    <div class="testimonial-stars">
+                    </div>
+                    <span class="tc-verified">Verified</span>
+                </div>
+                <div class="testimonial-quote-mark">&ldquo;</div>
+                <p class="tc-text">We celebrated our anniversary here and it was magical. The table was beautifully
+                    decorated, the staff remembered our preferences, and the Molten Lava Cake was absolutely divine.</p>
+                <div class="tc-dish-tag">Ordered: Molten Lava Cake</div>
+                <div class="testimonial-author">
+                    <div class="tc-avatar-ring">
+                        <img class="testimonial-avatar" src="https://prathameshgiri.in/assets/hero.img.jpeg"
+                            alt="Prathamesh Giri">
+                    </div>
+                    <div class="author-info">
+                        <strong>Prathamesh Giri</strong>
+                        <span>Anniversary Guests &middot; Pune</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card lazy-fade" style="transition-delay:0.24s">
+                <div class="tc-top">
+                    <div class="testimonial-stars">
+                    </div>
+                    <span class="tc-verified">Critic</span>
+                </div>
+                <div class="testimonial-quote-mark">&ldquo;</div>
+                <p class="tc-text">As a professional critic, I rarely give near-perfect scores. Gourmet Paradise earned
+                    every star. The Ribeye Steak and Butter Chicken are genuinely world-class.</p>
+                <div class="tc-dish-tag">Ordered: Ribeye Steak</div>
+                <div class="testimonial-author">
+                    <div class="tc-avatar-ring">
+                        <img class="testimonial-avatar" src="https://i.pravatar.cc/150?img=22" alt="Aditi M.">
+                    </div>
+                    <div class="author-info">
+                        <strong>Aditi Mehta</strong>
+                        <span>Food Critic &middot; Delhi</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card lazy-fade" style="transition-delay:0.36s">
+                <div class="tc-top">
+                    <div class="testimonial-stars">
+                    </div>
+                    <span class="tc-verified">Verified</span>
+                </div>
+                <div class="testimonial-quote-mark">&ldquo;</div>
+                <p class="tc-text">Brought my entire family for a birthday â€” 12 people, all blown away. The pasta
+                    section alone is worth visiting for. Will absolutely be coming back!</p>
+                <div class="tc-dish-tag">Ordered: Seafood Linguine</div>
+                <div class="testimonial-author">
+                    <div class="tc-avatar-ring">
+                        <img class="testimonial-avatar" src="https://i.pravatar.cc/150?img=33" alt="Rajan P.">
+                    </div>
+                    <div class="author-info">
+                        <strong>Rajan Patel</strong>
+                        <span>Regular Guest &middot; Ahmedabad</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONTACT SECTION ===== -->
+    <section id="contact" class="contact-section">
+        <div class="contact-inner">
+            <!-- LEFT: Info Panel -->
+            <div class="contact-info lazy-fade-left">
+                <span class="tag">Let's Connect</span>
+                <h2>We'd Love to <span>Hear</span> From You</h2>
+                <p>Whether it's a special occasion, a catering query, or simply feedback â€” we're all ears. Our team
+                    responds within 2 hours.</p>
+                <div class="contact-info-items">
+                    <div class="contact-info-item">
+                        <div class="ci-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22"
+                                height="22">
+                                <path
+                                    d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <strong>Find Us</strong>
+                            <span>123 Culinary Lane, Koregaon Park<br>Pune, Maharashtra 411001</span>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="ci-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22"
+                                height="22">
+                                <path
+                                    d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <strong>Call Us</strong>
+                            <span>+91 98765 43210<br>Mon&ndash;Sun, 11 AM &ndash; 11 PM</span>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="ci-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22"
+                                height="22">
+                                <path
+                                    d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <strong>Email Us</strong>
+                            <span>hello@gourmetparadise.in<br>Replies within 2 hours</span>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="ci-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22"
+                                height="22">
+                                <path
+                                    d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <strong>Opening Hours</strong>
+                            <span>Lunch: 12 PM &ndash; 3:30 PM<br>Dinner: 7 PM &ndash; 11 PM</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-social">
+                    <!-- Instagram -->
+                    <a href="#" class="cs-btn" title="Instagram">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18"
+                            height="18">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                        </svg>
+                    </a>
+                    <!-- Facebook -->
+                    <a href="#" class="cs-btn" title="Facebook">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18"
+                            height="18">
+                            <path
+                                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                        </svg>
+                    </a>
+                    <!-- Twitter / X -->
+                    <a href="#" class="cs-btn" title="Twitter">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18"
+                            height="18">
+                            <path
+                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.254 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                    </a>
+                    <!-- YouTube -->
+                    <a href="#" class="cs-btn" title="YouTube">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20"
+                            height="20">
+                            <path
+                                d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <!-- RIGHT: Form Card -->
+            <div class="contact-form-wrap lazy-fade-right">
+                <div class="contact-form-card">
+                    <div class="cf-header">
+                        <div class="cf-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24"
+                                height="24">
+                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3>Send a Message</h3>
+                            <p>We'll respond within 2 hours</p>
+                        </div>
+                    </div>
+                    <form id="contact-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Your Name</label>
+                                <input type="text" id="contact-name" placeholder="e.g. Aditi Sharma" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" id="contact-email" placeholder="aditi@email.com" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Subject</label>
+                            <select id="contact-subject">
+                                <option value="">Select a topic...</option>
+                                <option>Table Booking Inquiry</option>
+                                <option>Catering &amp; Events</option>
+                                <option>Menu &amp; Allergies</option>
+                                <option>Feedback &amp; Complaint</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Your Message</label>
+                            <textarea id="contact-message" rows="4" placeholder="Tell us how we can help you..."
+                                required></textarea>
+                        </div>
+                        <button type="submit" class="cf-submit-btn" id="cf-submit-btn">
+                            Send Message
+                        </button>
+                        <div class="cf-success" id="cf-success" style="display:none;">
+                            Message sent! We'll reply within 2 hours.
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="footer-logo">Gourmet Paradise</div>
+        <p style="margin-bottom:0.5rem;">Culinary Lane, Pune, Maharashtra</p>
+        <p style="margin-bottom:0.5rem;">+91 8698333062 &nbsp;|&nbsp; hello@gourmetparadise.in</p>
+        <p style="margin-top:1.5rem; font-size:0.82rem; opacity:0.5;">&copy; 2026 Gourmet Paradise. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="js/auth.js"></script>
+    <script src="js/order.js"></script>
+    <script src="js/booking.js"></script>
+    <script>
+        /* ---------- Intersection Observer for animations ---------- */
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.lazy-fade, .lazy-fade-left, .lazy-fade-right')
+            .forEach(el => observer.observe(el));
+
+        /* ---------- Hero Booking Form ---------- */
+        document.getElementById('hero-booking-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                name: document.getElementById('hb-name').value,
+                date: document.getElementById('hb-date').value,
+                time: document.getElementById('hb-time').value,
+                people: document.getElementById('hb-people').value
+            };
+            try {
+                const res = await fetch('/api/bookings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (result.success) {
+                    alert('ðŸŽ‰ Table reserved successfully! We will confirm shortly.');
+                    e.target.reset();
+                }
+            } catch (err) {
+                alert('Table reserved! (Offline mode)');
+            }
+        });
+
+        /* ---------- Navbar scroll shadow ---------- */
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('main-nav');
+            if (window.scrollY > 60) {
+                nav.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
+            } else {
+                nav.style.boxShadow = 'none';
+            }
+        });
+
+        /* ---------- Contact Form ---------- */
+        document.getElementById('contact-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('cf-submit-btn');
+            const success = document.getElementById('cf-success');
+            btn.innerHTML = ' Sending...';
+            btn.disabled = true;
+            const data = {
+                name: document.getElementById('contact-name').value,
+                email: document.getElementById('contact-email').value,
+                subject: document.getElementById('contact-subject')?.value || '',
+                message: document.getElementById('contact-message').value
+            };
+            try {
+                await fetch('/api/messages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+            } catch (_) { /* offline OK */ }
+            btn.innerHTML = 'Send Message';
+            btn.disabled = false;
+            success.style.display = 'flex';
+            e.target.reset();
+            setTimeout(() => { success.style.display = 'none'; }, 6000);
+        });
+    </script>
+
+</body>
+
+</html>

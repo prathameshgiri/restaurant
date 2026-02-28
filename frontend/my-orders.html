@@ -1,0 +1,467 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | Gourmet Paradise</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css">
+    <style>
+        .orders-page {
+            min-height: 100vh;
+            padding: 120px 8% 60px;
+            background: var(--bg-alt);
+        }
+
+        .orders-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .orders-header h1 {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 0.4rem;
+        }
+
+        .orders-header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .orders-toolbar {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.55rem 1.3rem;
+            border-radius: 50px;
+            border: 2px solid var(--border);
+            background: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-muted);
+            font-family: 'Times New Roman', serif;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .filter-btn:not(.active):hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .orders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .order-card {
+            background: white;
+            border-radius: 18px;
+            padding: 1.6rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            align-items: center;
+            gap: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .order-card:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.09);
+            transform: translateY(-2px);
+        }
+
+        .order-id {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 0.3rem;
+        }
+
+        .order-items {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+            line-height: 1.5;
+        }
+
+        .order-date {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .order-total {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .order-total-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 0.2rem;
+        }
+
+        .order-status-wrap {
+            text-align: center;
+        }
+
+        .order-status-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Status pill + timeline */
+        .status-pill {
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-Pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-Preparing {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-Completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-Cancelled {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .status-timeline {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 10px;
+            justify-content: center;
+        }
+
+        .timeline-step {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .timeline-step.done {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .timeline-step.current {
+            background: #fff3cd;
+            border-color: #f39c12;
+            color: #856404;
+        }
+
+        .timeline-line {
+            height: 2px;
+            width: 28px;
+            background: var(--border);
+            flex-shrink: 0;
+        }
+
+        .timeline-line.done {
+            background: var(--primary);
+        }
+
+        .cancel-btn {
+            background: none;
+            border: 2px solid #e74c3c;
+            color: #e74c3c;
+            border-radius: 10px;
+            padding: 0.55rem 1.1rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+            font-family: 'Times New Roman', serif;
+        }
+
+        .cancel-btn:hover {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .empty-orders {
+            text-align: center;
+            padding: 5rem 0;
+            color: var(--text-muted);
+        }
+
+        .empty-orders i {
+            font-size: 4rem;
+            opacity: 0.15;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .empty-orders h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .order-card {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .order-card {
+                grid-template-columns: 1fr;
+            }
+
+            .orders-page {
+                padding: 100px 5% 40px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav id="main-nav">
+        <div class="logo">
+            <a href="index.html" style="text-decoration:none; color: inherit;">Gourmet <span
+                    style="color:var(--accent)">Paradise</span></a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#menu">Menu</a></li>
+            <li><a href="index.html#booking">Book Table</a></li>
+            <li><a href="my-orders.html" style="color:var(--primary); font-weight:700;">My Orders</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <span id="user-greeting" style="font-weight:600; color:var(--text-muted); font-size:0.9rem;"></span>
+            <button class="btn btn-outline" onclick="logout()" style="padding:0.65rem 1.2rem; font-size:0.88rem;">
+                Logout
+            </button>
+        </div>
+    </nav>
+
+    <div class="orders-page">
+        <div class="orders-header lazy-fade">
+            <h1>My Orders</h1>
+            <p>Track and manage your food orders in real time</p>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="orders-toolbar lazy-fade">
+            <button class="filter-btn active" onclick="filterOrders('all', this)">All Orders</button>
+            <button class="filter-btn" onclick="filterOrders('Pending', this)">Pending</button>
+            <button class="filter-btn" onclick="filterOrders('Preparing', this)">Preparing</button>
+            <button class="filter-btn" onclick="filterOrders('Completed', this)">Completed</button>
+        </div>
+
+        <div class="orders-list" id="orders-list">
+            <div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i></div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        // Auth guard
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user || user.role !== 'user') {
+            window.location.href = 'login.html';
+        }
+        document.getElementById('user-greeting').innerText = `Hi, ${user.name} ðŸ‘‹`;
+
+        let allOrders = [];
+
+        function formatDate(iso) {
+            const d = new Date(iso);
+            return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+                + ' Â· ' + d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function getStatusStep(status) {
+            // Returns 0,1,2 for Pending, Preparing, Completed
+            if (status === 'Completed') return 2;
+            if (status === 'Preparing') return 1;
+            return 0;
+        }
+
+        function renderTimeline(status) {
+            if (status === 'Cancelled') return '';
+            const step = getStatusStep(status);
+            const steps = [
+                { icon: 'fa-clock', label: 'Pending' },
+                { icon: 'fa-fire', label: 'Preparing' },
+                { icon: 'fa-check', label: 'Completed' }
+            ];
+            let html = '<div class="status-timeline">';
+            steps.forEach((s, i) => {
+                const cls = i < step ? 'done' : (i === step ? 'current' : '');
+                html += `<div class="timeline-step ${cls}" title="${s.label}"><i class="fas ${s.icon}"></i></div>`;
+                if (i < steps.length - 1) {
+                    html += `<div class="timeline-line ${i < step ? 'done' : ''}"></div>`;
+                }
+            });
+            html += '</div>';
+            return html;
+        }
+
+        function renderOrders(orders) {
+            const list = document.getElementById('orders-list');
+            if (orders.length === 0) {
+                list.innerHTML = `
+                <div class="empty-orders">
+                    <h3>No orders found</h3>
+                    <p>You haven't placed any orders yet. Go explore our menu!</p>
+                    <a href="index.html#menu" class="btn btn-primary" style="display:inline-flex; margin-top:1.5rem;">
+                        Browse Menu
+                    </a>
+                </div>`;
+                return;
+            }
+
+            list.innerHTML = orders.map(order => `
+            <div class="order-card lazy-fade visible">
+                <!-- Left: Order Info -->
+                <div>
+                    <div class="order-id">Order #${order.id}</div>
+                    <div class="order-items">${order.items}</div>
+                    <div class="order-date">${formatDate(order.timestamp)}</div>
+                </div>
+
+                <!-- Middle: Total -->
+                <div>
+                    <div class="order-total-label">Order Total</div>
+                    <div class="order-total">${order.total}</div>
+                </div>
+
+                <!-- Status & Timeline -->
+                <div class="order-status-wrap">
+                    <div class="order-status-label">Status</div>
+                    <span class="status-pill status-${order.status}">
+                        <i class="fas ${order.status === 'Completed' ? 'fa-circle-check' : order.status === 'Preparing' ? 'fa-fire' : order.status === 'Cancelled' ? 'fa-circle-xmark' : 'fa-clock'}"></i>
+                        ${order.status}
+                    </span>
+                    ${renderTimeline(order.status)}
+                </div>
+
+                <!-- Action -->
+                <div>
+                    ${order.status === 'Pending'
+                    ? `<button class="cancel-btn" onclick="cancelOrder(${order.id})">
+                                Cancel
+                           </button>`
+                    : `<span style="color:var(--text-muted); font-size:0.82rem; display:block; text-align:center;">${order.status === 'Completed' ? 'âœ… Delivered' : order.status === 'Cancelled' ? 'âŒ Cancelled' : 'ðŸ”¥ In Kitchen'}</span>`
+                }
+                </div>
+            </div>
+        `).join('');
+        }
+
+        async function loadOrders() {
+            try {
+                const res = await fetch(`/api/orders?user=${encodeURIComponent(user.name)}`);
+                allOrders = await res.json();
+                // Newest first
+                allOrders.sort((a, b) => b.id - a.id);
+                renderOrders(allOrders);
+            } catch (err) {
+                document.getElementById('orders-list').innerHTML = `
+                <div class="empty-orders">
+                    <h3>Could not load orders</h3>
+                    <p>Make sure the server is running.</p>
+                </div>`;
+            }
+        }
+
+        function filterOrders(status, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            const filtered = status === 'all' ? allOrders : allOrders.filter(o => o.status === status);
+            renderOrders(filtered);
+        }
+
+        async function cancelOrder(id) {
+            if (!confirm('Are you sure you want to cancel this order?')) return;
+            try {
+                const res = await fetch(`/api/orders/${id}`, { method: 'DELETE' });
+                const result = await res.json();
+                if (result.success) {
+                    alert('Order cancelled successfully.');
+                    loadOrders();
+                } else {
+                    alert(result.message || 'Cannot cancel this order.');
+                }
+            } catch {
+                alert('Error cancelling order. Please try again.');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        }
+
+        // Observe animations
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.lazy-fade').forEach(el => observer.observe(el));
+
+        // Load orders on start & auto-refresh every 15 seconds
+        loadOrders();
+        setInterval(loadOrders, 15000);
+    </script>
+</body>
+
+</html>
