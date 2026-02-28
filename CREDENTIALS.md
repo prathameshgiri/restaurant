@@ -75,4 +75,4 @@ http://localhost:5000
 
 ---
 
-> 💡 *Built for learning & college project demo — Aditi Suryawanshi, 2026*
+> 💡 *Built for learning & college project demo — Prathamesh Giri, 2026*

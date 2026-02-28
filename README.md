@@ -220,7 +220,7 @@ npm install
 
 ## 👩‍💻 Developer
 
-**Aditi Suryawanshi**
+**Prathamesh Giri**
 - College Project — Full Stack Web Development
 - February 2026
 
