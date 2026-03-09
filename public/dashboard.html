@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>My Dashboard — Spice Garden</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍛</text></svg>" />
+</head>
+
+<body>
+    <nav id="navbar" class="scrolled"
+        style="background:rgba(255,255,255,0.95)!important;backdrop-filter:blur(20px);border-bottom:1.5px solid rgba(232,93,4,0.08);">
+        <a href="/" class="nav-logo">
+            <div class="nav-logo-icon">🍛</div>
+            <div class="nav-logo-text">Spice <span>Garden</span></div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/#menu">Menu</a></li>
+            <li><a href="/#contact">Contact</a></li>
+        </ul>
+        <div class="nav-actions">
+            <div id="navAuthArea"></div>
+        </div>
+    </nav>
+
+    <div class="dashboard-page">
+        <div class="dashboard-container">
+            <!-- Header -->
+            <div class="dashboard-header lazy-fade"
+                style="display:flex;align-items:center;gap:1.5rem;margin-bottom:2rem;">
+                <div id="dashAvatar"
+                    style="width:60px;height:60px;background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:800;color:#fff;flex-shrink:0;box-shadow:0 8px 25px rgba(232,93,4,0.3);">
+                </div>
+                <div>
+                    <h1 id="welcomeMsg" style="font-size:1.8rem">My Dashboard</h1>
+                    <p id="welcomeSub" style="color:var(--text-muted)">Track your orders and manage account</p>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div id="userStats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem;">
+            </div>
+
+            <!-- Tabs -->
+            <div class="dashboard-tabs">
+                <button class="dash-tab active" onclick="showTab('orders',this)">📦 My Orders</button>
+                <button class="dash-tab" onclick="showTab('profile',this)">👤 Profile</button>
+            </div>
+
+            <!-- Orders Tab -->
+            <div id="tab-orders">
+                <div id="ordersLoading" class="loading-overlay">
+                    <div class="spinner"></div>
+                </div>
+                <div id="ordersList" style="display:none"></div>
+            </div>
+
+            <!-- Profile Tab -->
+            <div id="tab-profile" style="display:none">
+                <div class="order-card" style="max-width:500px">
+                    <h3
+                        style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--dark);margin-bottom:1.5rem;">
+                        Account Details</h3>
+                    <div style="display:flex;flex-direction:column;gap:1rem;">
+                        <div class="form-group"><label>Full Name</label><input type="text" id="profName"
+                                placeholder="Full name" /></div>
+                        <div class="form-group"><label>Email</label><input type="email" id="profEmail" disabled
+                                style="opacity:0.5;cursor:not-allowed;background:var(--cream2)" /></div>
+                        <div class="form-group"><label>Phone</label><input type="tel" id="profPhone"
+                                placeholder="Phone number" /></div>
+                        <div class="form-group"><label>Default Delivery Address</label><input type="text"
+                                id="profAddress" placeholder="Delivery address" /></div>
+                        <button class="btn-primary" onclick="saveProfile()" style="justify-content:center;">Save
+                            Changes</button>
+                        <button class="btn-outline" onclick="logout()"
+                            style="justify-content:center;margin-top:0.3rem;">🚪 Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Detail Modal -->
+    <div class="modal-overlay" id="orderDetailModal">
+        <div class="modal" style="max-width:560px">
+            <div class="modal-header">
+                <h3 class="modal-title">Order Tracking</h3>
+                <button class="modal-close"
+                    onclick="document.getElementById('orderDetailModal').classList.remove('open')">✕</button>
+            </div>
+            <div id="orderDetailContent"></div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="modal" style="max-width:540px">
+            <div class="modal-header">
+                <h3 class="modal-title">🛒 Place Order</h3><button class="modal-close"
+                    onclick="document.getElementById('checkoutModal').classList.remove('open')">✕</button>
+            </div>
+            <div id="checkoutContent"></div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+    <script>
+        const getToken = () => localStorage.getItem('sg_token');
+        const getUser = () => { try { return JSON.parse(localStorage.getItem('sg_user')); } catch { return null; } };
+
+        function showToast(msg, type = 'info', icon = 'ℹ️') {
+            const c = document.getElementById('toastContainer'), t = document.createElement('div');
+            t.className = `toast ${type}`; t.innerHTML = `<span>${icon}</span><span>${msg}</span>`; c.appendChild(t);
+            setTimeout(() => { t.style.animation = 'slideOutRight 0.4s ease forwards'; setTimeout(() => t.remove(), 400); }, 3500);
+        }
+        function logout() { localStorage.clear(); window.location.href = '/user/login'; }
+        function showTab(tab, el) {
+            document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+            if (el) el.classList.add('active');
+            document.getElementById('tab-orders').style.display = tab === 'orders' ? 'block' : 'none';
+            document.getElementById('tab-profile').style.display = tab === 'profile' ? 'block' : 'none';
+        }
+        function renderNavAuth() {
+            const user = getUser(); if (!user) return;
+            const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase();
+            document.getElementById('navAuthArea').innerHTML = `<div class="nav-user">
+    <div class="nav-avatar">${initials}</div>
+    <span style="font-size:0.85rem;color:var(--text)">${user.name.split(' ')[0]}</span>
+    <div class="nav-dropdown"><a href="/dashboard">📦 My Orders</a><button onclick="logout()">🚪 Logout</button></div>
+  </div>`;
+        }
+        function statusBadge(s) {
+            const cls = { placed: 'status-placed', confirmed: 'status-confirmed', preparing: 'status-preparing', ready: 'status-ready', delivered: 'status-delivered', cancelled: 'status-cancelled' };
+            const labels = { placed: '⏳ Placed', confirmed: '✅ Confirmed', preparing: '👨‍🍳 Preparing', ready: '🍽️ Ready', delivered: '📦 Delivered', cancelled: '❌ Cancelled' };
+            return `<span class="order-status-badge ${cls[s] || ''}">${labels[s] || s}</span>`;
+        }
+        async function loadOrders() {
+            const token = getToken();
+            if (!token) { window.location.href = '/user/login?redirect=/dashboard'; return; }
+            try {
+                const res = await fetch('/api/orders/my', { headers: { 'Authorization': `Bearer ${token}` } });
+                const orders = await res.json();
+                document.getElementById('ordersLoading').style.display = 'none';
+                const list = document.getElementById('ordersList'); list.style.display = 'block';
+                // Stats
+                const delivered = orders.filter(o => o.status === 'delivered').length;
+                const pending = orders.filter(o => ['placed', 'confirmed', 'preparing', 'ready'].includes(o.status)).length;
+                const totalSpent = orders.filter(o => o.status !== 'cancelled').reduce((s, o) => s + o.totalAmount, 0);
+                document.getElementById('userStats').innerHTML = `
+      <div class="order-card" style="text-align:center;padding:1.2rem">
+        <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:800;color:var(--primary)">${orders.length}</div>
+        <div style="font-size:0.8rem;color:var(--text-muted)">Total Orders</div>
+      </div>
+      <div class="order-card" style="text-align:center;padding:1.2rem">
+        <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:800;color:#16a34a">${delivered}</div>
+        <div style="font-size:0.8rem;color:var(--text-muted)">Delivered</div>
+      </div>
+      <div class="order-card" style="text-align:center;padding:1.2rem">
+        <div style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:800;color:var(--primary)">₹${totalSpent.toLocaleString('en-IN')}</div>
+        <div style="font-size:0.8rem;color:var(--text-muted)">Total Spent</div>
+      </div>
+    `;
+                if (!orders.length) {
+                    list.innerHTML = `<div style="text-align:center;padding:4rem;color:var(--text-muted)">
+        <div style="font-size:4rem;margin-bottom:1rem">📦</div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--dark);margin-bottom:0.5rem">No orders yet!</h3>
+        <p style="margin-bottom:1.5rem">Start exploring our delicious menu</p>
+        <a href="/#menu" class="btn-primary" style="display:inline-flex;justify-content:center">🍽️ Browse Menu</a>
+      </div>`; return;
+                }
+                list.innerHTML = orders.map(o => `
+      <div class="order-card lazy-fade">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem">
+          <div><div class="order-id">${o.orderId}</div><div class="order-date">${new Date(o.createdAt).toLocaleString('en-IN')}</div></div>
+          ${statusBadge(o.status)}
+        </div>
+        <div class="order-items-list">${o.items.map(i => `<div class="order-item-line"><span>${i.name} × ${i.qty}</span><span>₹${i.price * i.qty}</span></div>`).join('')}</div>
+        <div class="order-total-line"><span>Total</span><span>₹${o.totalAmount}</span></div>
+        <div style="display:flex;gap:0.7rem;margin-top:1rem">
+          <button class="btn-primary" style="font-size:0.82rem;padding:0.55rem 1.2rem;justify-content:center" onclick="viewOrderDetail('${o.id}')">📍 Track Order</button>
+          ${['placed', 'confirmed'].includes(o.status) ? `<button class="btn-outline" style="font-size:0.82rem;padding:0.55rem 1rem;color:#dc2626;border-color:rgba(220,38,38,0.3);justify-content:center" onclick="cancelOrder('${o.id}')">Cancel</button>` : ''}
+        </div>
+      </div>
+    `).join('');
+                initLazyLoad();
+            } catch { showToast('Failed to load orders', 'error', '❌'); }
+        }
+        async function viewOrderDetail(id) {
+            const token = getToken();
+            try {
+                const res = await fetch(`/api/orders/track/${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
+                const o = await res.json();
+                if (!res.ok) throw new Error(o.error);
+                const allStatuses = ['placed', 'confirmed', 'preparing', 'ready', 'delivered'];
+                const currentIdx = allStatuses.indexOf(o.status);
+                document.getElementById('orderDetailContent').innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem">
+        <div><strong style="color:var(--primary);font-size:1.1rem">${o.orderId}</strong><br>
+        <span style="font-size:0.78rem;color:var(--text-muted)">${new Date(o.createdAt).toLocaleString('en-IN')}</span></div>
+        ${statusBadge(o.status)}
+      </div>
+      <div class="order-timeline" style="margin-bottom:1.5rem">
+        ${allStatuses.map((s, i) => {
+                    const step = o.timeline.find(t => t.status === s);
+                    const isDone = currentIdx >= i && o.status !== 'cancelled';
+                    const isActive = i === currentIdx && o.status !== 'cancelled';
+                    return `<div class="timeline-step ${isDone ? 'done' : ''} ${isActive ? 'active' : ''}">
+            <div style="position:relative">
+              <div class="timeline-dot">${isDone ? '✓' : ''}</div>
+              ${i < allStatuses.length - 1 ? `<div style="width:2px;background:${isDone ? 'var(--primary)' : 'rgba(232,93,4,0.12)'};position:absolute;left:11px;top:24px;height:30px;"></div>` : ''}
+            </div>
+            <div class="timeline-content">
+              <div class="timeline-status">${{ placed: 'Order Placed', confirmed: 'Confirmed', preparing: 'Preparing Your Food', ready: 'Ready for Pickup', delivered: 'Delivered' }[s]}</div>
+              <div class="timeline-time">${step ? new Date(step.time).toLocaleString('en-IN') : 'Pending'}</div>
+            </div>
+          </div>`;
+                }).join('')}
+        ${o.status === 'cancelled' ? `<div class="timeline-step done"><div style="position:relative"><div class="timeline-dot" style="background:#dc2626;border-color:#dc2626;color:#fff">✕</div></div><div class="timeline-content"><div class="timeline-status" style="color:#dc2626">Order Cancelled</div><div class="timeline-time">${new Date(o.timeline.slice(-1)[0].time).toLocaleString('en-IN')}</div></div></div>` : ''}
+      </div>
+      <div style="background:var(--cream);border-radius:14px;padding:1rem;border:1.5px solid var(--border)">
+        ${o.items.map(i => `<div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.3rem 0;border-bottom:1px solid var(--border);color:var(--text-muted)"><span>${i.name} × ${i.qty}</span><span style="color:var(--primary);font-weight:600">₹${i.price * i.qty}</span></div>`).join('')}
+        <div style="display:flex;justify-content:space-between;font-weight:800;margin-top:0.8rem;color:var(--dark)"><span>Total</span><span style="color:var(--primary);font-family:'Playfair Display',serif">₹${o.totalAmount}</span></div>
+      </div>
+      ${o.deliveryAddress ? `<div style="margin-top:1rem;font-size:0.82rem;color:var(--text-muted)">📍 ${o.deliveryAddress}</div>` : ''}
+    `;
+                document.getElementById('orderDetailModal').classList.add('open');
+            } catch (err) { showToast(err.message, 'error', '❌'); }
+        }
+        async function cancelOrder(id) {
+            if (!confirm('Are you sure you want to cancel this order?')) return;
+            try {
+                const res = await fetch(`/api/orders/${id}/cancel`, { method: 'PUT', headers: { 'Authorization': `Bearer ${getToken()}` } });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
+                showToast('Order cancelled', 'info', '❌'); loadOrders();
+            } catch (err) { showToast(err.message, 'error', '❌'); }
+        }
+        function initLazyLoad() {
+            const obs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } }), { threshold: 0.1 });
+            document.querySelectorAll('.lazy-fade').forEach(el => { if (!el.classList.contains('visible')) obs.observe(el); });
+        }
+        function saveProfile() { showToast('Profile saved!', 'success', '✅'); }
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = getUser();
+            if (!user) { window.location.href = '/user/login?redirect=/dashboard'; return; }
+            if (user.role === 'admin') { window.location.href = '/admin/dashboard.html'; return; }
+            const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase();
+            document.getElementById('dashAvatar').textContent = initials;
+            document.getElementById('welcomeMsg').textContent = `Welcome, ${user.name.split(' ')[0]}! 👋`;
+            document.getElementById('welcomeSub').textContent = `Customer Account`;
+            document.getElementById('profName').value = user.name || '';
+            document.getElementById('profEmail').value = user.email || '';
+            document.getElementById('profPhone').value = user.phone || '';
+            document.getElementById('profAddress').value = user.address || '';
+            renderNavAuth();
+            loadOrders();
+            initLazyLoad();
+        });
+    </script>
+</body>
+
+</html>

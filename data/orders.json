@@ -1,0 +1,162 @@
+[
+  {
+    "id": "ef1eeaa2-f288-4a70-b5b9-da6742d8f130",
+    "orderId": "ORD-441870",
+    "userId": "admin-001",
+    "userName": "Admin",
+    "userEmail": "admin@spicegarden.com",
+    "items": [
+      {
+        "id": "m1",
+        "name": "Butter Chicken",
+        "price": 320,
+        "qty": 2
+      }
+    ],
+    "totalAmount": 640,
+    "deliveryAddress": "Restaurant HQ",
+    "paymentMethod": "cash",
+    "notes": "",
+    "status": "placed",
+    "createdAt": "2026-02-28T17:24:01.871Z",
+    "timeline": [
+      {
+        "status": "placed",
+        "time": "2026-02-28T17:24:01.871Z",
+        "message": "Order placed successfully"
+      }
+    ]
+  },
+  {
+    "id": "1b77cfaa-49e6-41f4-9dac-0574701d9a72",
+    "orderId": "ORD-799030",
+    "userId": "user-001",
+    "userName": "Demo User",
+    "userEmail": "user@spicegarden.com",
+    "items": [
+      {
+        "id": "m1",
+        "name": "Butter Chicken",
+        "price": 320,
+        "qty": 1
+      }
+    ],
+    "totalAmount": 320,
+    "deliveryAddress": "12, MG Road, Pune",
+    "paymentMethod": "cash",
+    "notes": "",
+    "status": "preparing",
+    "createdAt": "2026-02-28T18:03:19.032Z",
+    "timeline": [
+      {
+        "status": "placed",
+        "time": "2026-02-28T18:03:19.032Z",
+        "message": "Order placed successfully"
+      },
+      {
+        "status": "preparing",
+        "time": "2026-02-28T18:08:06.713Z",
+        "message": "Chef is preparing your order"
+      }
+    ]
+  },
+  {
+    "id": "294d8f24-e774-46cf-96ad-509c3c57b708",
+    "orderId": "ORD-226029",
+    "userId": "user-001",
+    "userName": "Demo User",
+    "userEmail": "user@spicegarden.com",
+    "items": [
+      {
+        "id": "m2",
+        "name": "Paneer Tikka Masala",
+        "price": 280,
+        "qty": 1
+      }
+    ],
+    "totalAmount": 280,
+    "deliveryAddress": "12, MG Road, Pune",
+    "paymentMethod": "upi",
+    "notes": "",
+    "status": "delivered",
+    "createdAt": "2026-03-01T02:13:46.030Z",
+    "timeline": [
+      {
+        "status": "placed",
+        "time": "2026-03-01T02:13:46.030Z",
+        "message": "Order placed successfully"
+      },
+      {
+        "status": "delivered",
+        "time": "2026-03-01T02:14:22.792Z",
+        "message": "Order delivered successfully"
+      }
+    ]
+  },
+  {
+    "id": "ee1d3bef-aded-49cb-a557-527859b747cd",
+    "orderId": "ORD-105699",
+    "userId": "admin-001",
+    "userName": "Admin",
+    "userEmail": "admin@spicegarden.com",
+    "items": [
+      {
+        "id": "m1",
+        "name": "Butter Chicken",
+        "price": 320,
+        "qty": 1
+      }
+    ],
+    "totalAmount": 320,
+    "deliveryAddress": "Restaurant HQ",
+    "paymentMethod": "cash",
+    "notes": "",
+    "status": "delivered",
+    "createdAt": "2026-03-07T06:15:05.700Z",
+    "timeline": [
+      {
+        "status": "placed",
+        "time": "2026-03-07T06:15:05.700Z",
+        "message": "Order placed successfully"
+      },
+      {
+        "status": "delivered",
+        "time": "2026-03-07T06:15:21.932Z",
+        "message": "Order delivered successfully"
+      }
+    ]
+  },
+  {
+    "id": "3b766b61-a250-450c-b986-27bb93ec196c",
+    "orderId": "ORD-363503",
+    "userId": "user-001",
+    "userName": "Demo User",
+    "userEmail": "user@spicegarden.com",
+    "items": [
+      {
+        "id": "m5",
+        "name": "Veg Biryani",
+        "price": 280,
+        "qty": 1
+      }
+    ],
+    "totalAmount": 280,
+    "deliveryAddress": "12, MG Road, Pune",
+    "paymentMethod": "cash",
+    "notes": "",
+    "status": "delivered",
+    "createdAt": "2026-03-09T15:16:03.504Z",
+    "timeline": [
+      {
+        "status": "placed",
+        "time": "2026-03-09T15:16:03.504Z",
+        "message": "Order placed successfully"
+      },
+      {
+        "status": "delivered",
+        "time": "2026-03-09T15:16:19.022Z",
+        "message": "Order delivered successfully"
+      }
+    ]
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "r1",
+    "name": "Priya Sharma",
+    "rating": 5,
+    "comment": "Absolutely divine! The Butter Chicken is the best I have ever had. The ambiance is beautiful and the staff is incredibly warm and welcoming.",
+    "date": "2024-01-15",
+    "avatar": "PS"
+  },
+  {
+    "id": "r2",
+    "name": "Rahul Mehta",
+    "rating": 5,
+    "comment": "Spice Garden lives up to every bit of its reputation. The Hyderabadi Biryani is a masterpiece - perfectly spiced and incredibly aromatic.",
+    "date": "2024-02-03",
+    "avatar": "RM"
+  },
+  {
+    "id": "r3",
+    "name": "Ananya Patel",
+    "rating": 4,
+    "comment": "Wonderful dining experience! The Paneer Tikka Masala was exceptional. Great vegetarian options too. Highly recommend for family outings!",
+    "date": "2024-02-20",
+    "avatar": "AP"
+  },
+  {
+    "id": "r4",
+    "name": "Vikram Singh",
+    "rating": 5,
+    "comment": "Every dish was a culinary journey. The Mutton Rogan Josh melted in the mouth. Will definitely be back with the whole family!",
+    "date": "2024-03-01",
+    "avatar": "VS"
+  },
+  {
+    "id": "r5",
+    "name": "Sunita Reddy",
+    "rating": 5,
+    "comment": "The Pani Puri here is legendary. Amazing street food presented so elegantly. The Mango Lassi is refreshing and the service is top notch.",
+    "date": "2024-03-10",
+    "avatar": "SR"
+  }
+]
